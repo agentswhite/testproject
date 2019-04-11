@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\EntryForm;
 
 class SiteController extends Controller
 {
@@ -125,4 +126,33 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    public function actionSay($message = 'Hello')
+    {
+        return $this->render('say', ['message' => $message]);
+    }
+
+    /*метод, к-й принимает два параметра и через стрелку как в массиве выводит их
+     на экран*/
+    public function actionTest($test1, $test2)
+    {
+        //print_r($test1);
+        //print_r($test2);
+        return $this->render('test', ['test1' => $test1, 'test2' => $test2]);
+    }
+    /*метод, который принимает 2 пар-ма, 1 обязат, 2 необязат, в случае если 2 пар-р
+    не передан, он должен быть равен 1. путь должен быть post/article
+    */
+
+    public function actionEntry()
+    {
+        $model = new EntryForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            return $this->render('entry-confirm', ['model' => $model]);
+        } else {
+            return $this->render('entry', ['model' => $model]);
+        }
+    }
 }
+
